@@ -8,3 +8,4 @@ fibMain(r) >< (int n) => fibt(r, 1, 0) ~ n;
 
 fibMain(r)~9;
 r;
+exit;

@@ -244,9 +244,9 @@ static int enableRawMode(int fd) {
      * no start/stop output control. */
     raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
     /* output modes - disable post processing */
-    raw.c_oflag &= ~(OPOST);
+    raw.c_oflag &= ~OPOST;
     /* control modes - set 8 bit chars */
-    raw.c_cflag |= (CS8);
+    raw.c_cflag |= CS8;
     /* local modes - choing off, canonical off, no extended functions,
      * no signal chars (^Z,^C) */
     raw.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
@@ -524,7 +524,7 @@ static void refreshSingleLine(struct linenoiseState *l) {
     size_t pos = l->pos;
     struct abuf ab;
 
-    while((plen+pos) >= l->cols) {
+    while(plen + pos >= l->cols) {
         buf++;
         len--;
         pos--;
@@ -667,10 +667,10 @@ int linenoiseEditInsert(struct linenoiseState *l, char c) {
             l->pos++;
             l->len++;
             l->buf[l->len] = '\0';
-            if ((!mlmode && l->plen+l->len < l->cols && !hintsCallback)) {
+            if (!mlmode && l->plen + l->len < l->cols && !hintsCallback) {
                 /* Avoid a full update of the line in the
                  * trivial case. */
-                char d = (maskmode==1) ? '*' : c;
+                char d = maskmode == 1 ? '*' : c;
                 if (write(l->ofd,&d,1) == -1) return -1;
             } else {
                 refreshLine(l);
@@ -730,7 +730,7 @@ void linenoiseEditHistoryNext(struct linenoiseState *l, int dir) {
         free(history[history_len - 1 - l->history_index]);
         history[history_len - 1 - l->history_index] = strdup(l->buf);
         /* Show the new entry */
-        l->history_index += (dir == LINENOISE_HISTORY_PREV) ? 1 : -1;
+        l->history_index += dir == LINENOISE_HISTORY_PREV ? 1 : -1;
         if (l->history_index < 0) {
             l->history_index = 0;
             return;
@@ -1132,7 +1132,7 @@ int linenoiseHistoryAdd(const char *line) {
     if (history == NULL) {
         history = malloc(sizeof(char*)*history_max_len);
         if (history == NULL) return 0;
-        memset(history,0,(sizeof(char*)*history_max_len));
+        memset(history,0, sizeof(char *) * history_max_len);
     }
 
     /* Don't add duplicated lines. */

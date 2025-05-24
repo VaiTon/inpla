@@ -14,3 +14,4 @@ fib(ret) >< (int n)
 ret << fib(9);
 ret;
 
+exit;

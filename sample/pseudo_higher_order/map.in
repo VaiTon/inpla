@@ -5,7 +5,7 @@ inc(r)><(int i) => r~(i+1);
 subPair(r)><(int m, int n) => r~(m-n);
 
 
-// ----------- main (with the built-in Map and `%' notation) ----------- 
+// ----------- main (with the built-in Map and `%' notation) -----------
 Map(r, %inc) ~ [1,2,3];
 r;  // r ->[2,3,4]
 
@@ -15,11 +15,11 @@ rr; // r4 ->[8,17]
 
 
 
-// ----------- main (without the built-in Map) ----------- 
+// ----------- main (without the built-in Map) -----------
 // map
 map(result, f) >< []   => result~[], Eraser~f;
-map(result, f) >< x:xs => Dup(f1,f2)~f, 
-                          result~w:ws, 
+map(result, f) >< x:xs => Dup(f1,f2)~f,
+                          result~w:ws,
                           f1 ~ (w, x), map(ws, f2)~xs;
 
 
@@ -47,3 +47,4 @@ r5; // r5 ->[101,201,301]
 r6 << map(%subPair, [(10,2), (30,13)]);
 r6; // r6 ->[8,17]
 
+exit;

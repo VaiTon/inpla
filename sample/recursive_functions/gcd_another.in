@@ -14,3 +14,4 @@ gcd(r) ~ (14,21);
 r; // it should be 7
 
 
+exit;

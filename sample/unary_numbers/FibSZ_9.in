@@ -31,3 +31,4 @@ fib(r)~S(S(S(S(S(S(S(S(S(Z)))))))));
 prnat r;
 free r;
 
+exit;

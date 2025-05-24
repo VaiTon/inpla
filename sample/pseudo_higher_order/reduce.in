@@ -10,7 +10,7 @@
 // --------------------------------------------------------------------
 foldr(r, f, v) >< x:xs => foldr_Cons(r,f,v,x)~xs;
 foldr_Cons(r,f,v,x) >< [] => f~((r,x),v);
-foldr_Cons(r,f,v,x) >< y:ys => 
+foldr_Cons(r,f,v,x) >< y:ys =>
          Dup(f1,f2)~f,
          foldr(w, f2, v)~y:ys,
          f1~((r,x),w);
@@ -18,9 +18,9 @@ foldr_Cons(r,f,v,x) >< y:ys =>
 // --------------------------------------------------------------------
 // foldl f v [x0, x1, ..., xn] = f( ... f(f(v,x0),x1) ..., xn)
 // --------------------------------------------------------------------
-foldl(r, f, v) >< x:xs => foldl_Cons(r,f,v,x)~xs;    
+foldl(r, f, v) >< x:xs => foldl_Cons(r,f,v,x)~xs;
 foldl_Cons(r,f,v,x) >< [] => f~((r,v),x);
-foldl_Cons(r,f,v,x) >< y:ys => 
+foldl_Cons(r,f,v,x) >< y:ys =>
          Dup(f1,f2)~f,
          f1~((w,v),x),
          foldl(r, f2, w)~y:ys;
@@ -28,7 +28,7 @@ foldl_Cons(r,f,v,x) >< y:ys =>
 
 
 
-// ---------- main ---------- 
+// ---------- main ----------
 
 // foldr f v [x0, x1, ..., xn] = f(x0, f(x1, ... f(xn-1, f(xn, v))...))
 // foldr plus 10 [1,2,3] = plus(1, plus(2, plus(3, 10))) = 16
@@ -55,3 +55,5 @@ r; free r; // r ->16
 // foldl subt 10 [1,2,3] = subt(subt(subt(10,1),2),3) = ((10-1)-2)-3 = 4
 foldl(r, %Sub, 10) ~ [1,2,3];
 r; free r; // r ->4
+
+exit;

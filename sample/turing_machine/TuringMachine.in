@@ -9,10 +9,10 @@
 // (0    ,   1) => Write(0, 1)      // write 0 and change state into 1
 // (1    ,   0) => GoRight(2)       // headPos+1 and change state into 2
 // (2    ,   1) => Write(0, 1)      // write 0 and change state into 1
-// otherwise    => Halt    
+// otherwise    => Halt
 //
 // Example:
-// (tape, state, headPos) 
+// (tape, state, headPos)
 // ([1,1,1,1,1,0], 1, 0) -->* ([0,0,0,0,0,0,0],2,5)
 //
 
@@ -129,3 +129,4 @@ allCycle(r) >< STOP_Configure(tape, state, headPos) =>
 conf ~ Configure([1,1,1,1,1,0], 0, 0),  //(tape, state, headPos)
 r << allCycle(conf);
 r;   // -->* Configure([0,0,0,0,0,0,0],2,5)
+exit;

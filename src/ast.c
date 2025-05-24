@@ -1,51 +1,48 @@
 //----------------------------------------
 // for AST
 //----------------------------------------
-//http://www.hpcs.cs.tsukuba.ac.jp/~msato/lecture-note/comp-lecture/tiny-c-note2.html
+// http://www.hpcs.cs.tsukuba.ac.jp/~msato/lecture-note/comp-lecture/tiny-c-note2.html
+
+#include "ast.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "ast.h"
 
 #define MAX_SYMBOLS 256
 typedef struct {
-  char* sym[MAX_SYMBOLS];
-  long val[MAX_SYMBOLS];
-  int nth;
+  char *sym[MAX_SYMBOLS];
+  long  val[MAX_SYMBOLS];
+  int   nth;
 } SymbolTable;
 
 static SymbolTable SymTable, ConstTable;
 
-
 void SymTable_init(SymbolTable *table) {
-  int i;
   table->nth = 0;
-  for (i=0; i<MAX_SYMBOLS; i++) {
+  for (int i = 0; i < MAX_SYMBOLS; i++) {
     table->sym[i] = NULL;
   }
 }
 
 char *recordSymbol(SymbolTable *table, char *name) {
-  int i;
-  char *result;
 
-  for (i=0; i< table->nth; i++) {
+  for (int i = 0; i < table->nth; i++) {
     if (strcmp(table->sym[i], name) == 0) {
 
       // The `name' has existed already,
       // and table->sym[i] is used instead of that,
       // so starduped memory for the `name' should be freed here.
       // free(name);
-      
+
       return table->sym[i];
     }
   }
 
   // inpla.l で strdup されているので、
   // ここでは stardup せずに、単に ポインタを格納するだけ。
-  table->sym[table->nth]=name; 
-  result = table->sym[table->nth];
+  table->sym[table->nth] = name;
+  char *result = table->sym[table->nth];
   table->nth++;
   if (table->nth > MAX_SYMBOLS) {
     puts("ERROR: The SymbolTable in AST library is too small.");
@@ -56,9 +53,7 @@ char *recordSymbol(SymbolTable *table, char *name) {
 }
 
 int lookupEntry(SymbolTable *table, char *name) {
-  int i;
-
-  for (i=0; i< table->nth; i++) {
+  for (int i = 0; i < table->nth; i++) {
     if (strcmp(table->sym[i], name) == 0) {
       return i;
     }
@@ -66,46 +61,41 @@ int lookupEntry(SymbolTable *table, char *name) {
   return -1;
 }
 
-int ast_getRecordedVal(int entry) {
-  return ConstTable.val[entry];
-}
-
+int ast_getRecordedVal(int entry) { return ConstTable.val[entry]; }
 
 void recordVal(SymbolTable *table, char *name, long val) {
   int i;
-  
-  for (i=0; i< table->nth; i++) {
+
+  for (i = 0; i < table->nth; i++) {
     if (strcmp(table->sym[i], name) == 0) {
 
       // The `name' has existed already,
       // and table->sym[i] is used instead of that,
       // so starduped memory for the `name' should be freed here.
       free(name);
-      
+
       table->val[i] = val;
       return;
     }
   }
-  //table->sym[table->nth]=strdup(name);
-  table->sym[table->nth]=name;
-  table->val[table->nth]=val;
+  // table->sym[table->nth]=strdup(name);
+  table->sym[table->nth] = name;
+  table->val[table->nth] = val;
   table->nth++;
   if (table->nth > MAX_SYMBOLS) {
     puts("ERROR: The SymbolTable in AST library is too small.");
     exit(-1);
   }
-
 }
 
-
 static Ast *AstHeap;
-static int NextPtr_AstHeap;
+static int  NextPtr_AstHeap;
 #define MAX_AST_HEAP 10000
 
 void ast_heapInit(void) {
-  
+
   NextPtr_AstHeap = 0;
-  AstHeap = malloc(sizeof(Ast)*MAX_AST_HEAP);
+  AstHeap = malloc(sizeof(Ast) * MAX_AST_HEAP);
   if (AstHeap == NULL) {
     printf("Malloc error [AstHeap]\n");
     exit(-1);
@@ -115,15 +105,13 @@ void ast_heapInit(void) {
   SymTable_init(&ConstTable);
 }
 
-void ast_heapReInit(void) {
-  NextPtr_AstHeap = 0;
-}  
+void ast_heapReInit(void) { NextPtr_AstHeap = 0; }
 
 static Ast *ast_myalloc(void) {
   Ast *ptr;
-  
+
   if (NextPtr_AstHeap < MAX_AST_HEAP) {
-    ptr=&AstHeap[NextPtr_AstHeap];
+    ptr = &AstHeap[NextPtr_AstHeap];
     NextPtr_AstHeap++;
   } else {
     printf("[Error] All memory for AST was run out.\n");
@@ -132,7 +120,6 @@ static Ast *ast_myalloc(void) {
 
   return ptr;
 }
-
 
 Ast *ast_makeSymbol(char *name) {
   Ast *ptr;
@@ -159,21 +146,19 @@ int ast_recordConst(char *name, int val) {
   }
 }
 
-
-
 Ast *ast_makeAST(AST_ID id, Ast *left, Ast *right) {
   Ast *ptr;
-  if ((id == AST_AGENT) && (right == NULL)) {
+  if (id == AST_AGENT && right == NULL) {
     int entry = lookupEntry(&ConstTable, left->sym);
     if (entry != -1) {
-      
+
       ptr = ast_myalloc();
       ptr->id = AST_INT;
       ptr->longval = ConstTable.val[entry];
       return ptr;
     }
   }
-  
+
   ptr = ast_myalloc();
   ptr->id = id;
   ptr->right = right;
@@ -182,8 +167,8 @@ Ast *ast_makeAST(AST_ID id, Ast *left, Ast *right) {
 }
 
 int count_elem(Ast *p) {
-  int count=0;
-  while (p!=NULL) {
+  int count = 0;
+  while (p != NULL) {
     p = ast_getTail(p);
     count++;
   }
@@ -191,15 +176,15 @@ int count_elem(Ast *p) {
 }
 
 Ast *ast_makeTuple(Ast *tuple) {
-    Ast *ptr;
-    ptr = ast_myalloc();
-    ptr->id = AST_TUPLE;
-    ptr->right = tuple;
-    ptr->intval = count_elem(tuple);
-    return ptr;
+  Ast *ptr;
+  ptr = ast_myalloc();
+  ptr->id = AST_TUPLE;
+  ptr->right = tuple;
+  ptr->intval = count_elem(tuple);
+  return ptr;
 }
 
-Ast *ast_paramToCons(Ast *ast) { 
+Ast *ast_paramToCons(Ast *ast) {
   // Suppose that ast has the following form:
   //   LIST(a, LIST(b, NULL)).
   // This function makes it an agent form like:
@@ -211,74 +196,99 @@ Ast *ast_paramToCons(Ast *ast) {
 
   Ast *head = ast->left;
   Ast *tail = ast->right;
-  Ast *ret = ast_makeAST(AST_OPCONS, NULL,
-			 ast_makeList2(head, ast_paramToCons(tail)));
+  Ast *ret =
+      ast_makeAST(AST_OPCONS, NULL, ast_makeList2(head, ast_paramToCons(tail)));
   return ret;
-  
 }
 
+Ast *ast_addLast(Ast *l, Ast *p) {
+  Ast *q;
 
-
-Ast *ast_addLast(Ast *l, Ast *p)
-{
-    Ast *q;
-
-    if(l == NULL) return ast_makeAST(AST_LIST,p,NULL);
-    q = l;
-    while(q->right != NULL) q = q->right;
-    q->right = ast_makeAST(AST_LIST,p,NULL);
-    return l;
+  if (l == NULL)
+    return ast_makeAST(AST_LIST, p, NULL);
+  q = l;
+  while (q->right != NULL)
+    q = q->right;
+  q->right = ast_makeAST(AST_LIST, p, NULL);
+  return l;
 }
 
-Ast *ast_getNth(Ast *p,int nth)
-{
-    if(p->id != AST_LIST){
-	fprintf(stderr,"bad access to list\n");
-	exit(1);
-    }
-    if(nth > 0) return(ast_getNth(p->right,nth-1));
-    else return p->left;
+Ast *ast_getNth(Ast *p, int nth) {
+  if (p->id != AST_LIST) {
+    fprintf(stderr, "bad access to list\n");
+    exit(1);
+  }
+  if (nth > 0)
+    return ast_getNth(p->right, nth - 1);
+  else
+    return p->left;
 }
 
-Ast *ast_getTail(Ast *p)
-{
-    if(p->id != AST_LIST){
-	fprintf(stderr,"bad access to list\n");
-	exit(1);
-    }
-    else return p->right;
+Ast *ast_getTail(Ast *p) {
+  if (p->id != AST_LIST) {
+    fprintf(stderr, "bad access to list\n");
+    exit(1);
+  } else
+    return p->right;
 }
 
 void ast_puts(Ast *p) {
   static char *string_AstID[] = {
-    // basic
-    "SYM", "NAME", "INTNAME", "AGENT",
-    "CNCT", "CNCT_TRO_INT", "CNCT_TRO_CONS", "CNCT_TRO",
-    "RULE", "BODY", "IF", "THEN_ELSE", 
+      // basic
+      "SYM",
+      "NAME",
+      "INTNAME",
+      "AGENT",
+      "CNCT",
+      "CNCT_TRO_INT",
+      "CNCT_TRO_CONS",
+      "CNCT_TRO",
+      "RULE",
+      "BODY",
+      "IF",
+      "THEN_ELSE",
 
-    // LIST
-    "LIST", 
+      // LIST
+      "LIST",
 
-    // annotation
-    "(*L)", "(*R)",
+      // annotation
+      "(*L)",
+      "(*R)",
 
-    // extension
-    "TUPLE", 
-    "INT", "LD", "ADD", "SUB", "MUL", "DIV", "MOD", 
-    "LT", "LE",  "EQ", "NE", "UNM", "AND", "OR", "NOT",
+      // extension
+      "TUPLE",
+      "INT",
+      "LD",
+      "ADD",
+      "SUB",
+      "MUL",
+      "DIV",
+      "MOD",
+      "LT",
+      "LE",
+      "EQ",
+      "NE",
+      "UNM",
+      "AND",
+      "OR",
+      "NOT",
 
-    
-    "CONS", "NIL", 
-    "RAND", "SRAND", 
-    "PERCENT",
-    
-    // default
-    "UNDEFINED",
+      "CONS",
+      "NIL",
+      "RAND",
+      "SRAND",
+      "PERCENT",
+
+      // default
+      "UNDEFINED",
   };
 
-  if (p==NULL) {printf("NULL"); return;}
+  if (p == NULL) {
+    printf("NULL");
+    return;
+  }
 
-  switch(p->id) {
+  switch (p->id) {
   case AST_INT:
     printf("int %ld", p->longval);
     break;
@@ -304,10 +314,8 @@ void ast_puts(Ast *p) {
     printf(",");
     ast_puts(p->right);
     printf(")");
-
   }
 }
-
 
 Ast *ast_unfoldABR(Ast *left_params, char *sym, Ast *paramlist, Ast *annotate) {
   // input:
@@ -321,26 +329,24 @@ Ast *ast_unfoldABR(Ast *left_params, char *sym, Ast *paramlist, Ast *annotate) {
 
   if (!strcmp(sym, "Merger")) {
     // left << Merger(paramlist)  ==> Merger(left) ~ (paramlist)
-    Ast *agent_left = ast_makeAST(AST_AGENT, ast_makeSymbol("Merger"),
-				  left_params);
+    Ast *agent_left =
+        ast_makeAST(AST_AGENT, ast_makeSymbol("Merger"), left_params);
     Ast *agent_right = ast_makeTuple(paramlist);
     Ast *cnct = ast_makeAST(AST_CNCT, agent_left, agent_right);
-    return cnct;    
+    return cnct;
   }
 
-  
   if (!strcmp(sym, "Append")) {
     // paramlist: [a,b] => [b,a]
     if (paramlist->right != NULL) {
-      Ast *tmp = paramlist->left;                // tmp for a
-      paramlist->left = paramlist->right->left;  // a := b
-      paramlist->right->left = tmp;              // b := a
+      Ast *tmp = paramlist->left;               // tmp for a
+      paramlist->left = paramlist->right->left; // a := b
+      paramlist->right->left = tmp;             // b := a
     }
   }
 
-  
-  //ast_puts(left);puts("");
-  //ast_puts(paramlist);puts("");
+  // ast_puts(left);puts("");
+  // ast_puts(paramlist);puts("");
 
   Ast *params, *param, *at;
 
@@ -351,15 +357,15 @@ Ast *ast_unfoldABR(Ast *left_params, char *sym, Ast *paramlist, Ast *annotate) {
     params = NULL;
   } else {
     params = param = NULL;
-    
+
     // params@[param] => params, param
-    at = paramlist;    
+    at = paramlist;
     while (at->right != NULL) {
       if (at->right->right == NULL) {
-	param = at->right->left; // compoment
-	at->right = NULL;        // break the list chain
-	params = paramlist;      // params is the list whose last is just broken
-	break;
+        param = at->right->left; // compoment
+        at->right = NULL;        // break the list chain
+        params = paramlist;      // params is the list whose last is just broken
+        break;
       }
       at = at->right;
     }
@@ -368,7 +374,6 @@ Ast *ast_unfoldABR(Ast *left_params, char *sym, Ast *paramlist, Ast *annotate) {
   //  ast_puts(params);puts("");
   //  ast_puts(param);puts("");
 
-
   // make left_params as left_params @ params
   at = left_params;
   if (at == NULL) {
@@ -376,40 +381,36 @@ Ast *ast_unfoldABR(Ast *left_params, char *sym, Ast *paramlist, Ast *annotate) {
   } else {
     while (at != NULL) {
       if (at->right == NULL) {
-	at->right = params;
-	break;
+        at->right = params;
+        break;
       }
       at = at->right;
     }
   }
   //  ast_puts(left);puts("");
 
-
   Ast *agent_left = ast_makeAST(AST_AGENT, ast_makeSymbol(sym), left_params);
   if (annotate != NULL) {
     // replace (AST_ANNOTATE NULL NULL) with (AST_ANNOTATE agent_left NULL)
     annotate->left = agent_left;
     agent_left = annotate;
-  }    
+  }
   Ast *agent_right = param;
   Ast *cnct = ast_makeAST(AST_CNCT, agent_left, agent_right);
-  
-  //ast_puts(agent_left);puts("");
-  //ast_puts(agent_right);puts("");
 
-  //exit(1);
+  // ast_puts(agent_left);puts("");
+  // ast_puts(agent_right);puts("");
+
+  // exit(1);
   return cnct;
-  
 }
-
-
-
 
 Ast *ast_remove_tuple1(Ast *p) {
 
-  if (p==NULL) return p;
+  if (p == NULL)
+    return p;
 
-  switch(p->id) {
+  switch (p->id) {
   case AST_INT:
     return p;
     break;
@@ -436,6 +437,5 @@ Ast *ast_remove_tuple1(Ast *p) {
     p->left = ast_remove_tuple1(p->left);
     p->right = ast_remove_tuple1(p->right);
     return p;
-
   }
 }

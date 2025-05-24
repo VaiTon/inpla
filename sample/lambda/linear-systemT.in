@@ -140,3 +140,4 @@ Lamc(m,t)~App(n,apr),
 Lamc(n,apr)~App(a,App(b, r));
 prnat r;
 free r;
+exit;
