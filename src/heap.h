@@ -2,7 +2,7 @@
 #define INPLA_HEAP_H
 
 #include "id_table.h"
-#include "mytype.h"
+#include "types.h"
 
 #include <stddef.h>
 

@@ -1,7 +1,7 @@
 #include "cmenv.h"
 
 #include "imcode.h"
-#include "mytype.h"
+#include "types.h"
 
 #include <stdio.h>
 #include <stdlib.h>

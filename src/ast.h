@@ -1,15 +1,16 @@
+
 // http://www.hpcs.cs.tsukuba.ac.jp/~msato/lecture-note/comp-lecture/tiny-c/AST.h
 
 #ifndef _AST_
 #define _AST_
-#include "mytype.h"
-#include "config.h"
+
+#include "types.h"
 
 #include <stdbool.h>
 
 typedef enum {
   // clang-format off
-  AST_SYM=0, AST_NAME, AST_INTVAR, AST_AGENT,
+  AST_SYM = 0, AST_NAME, AST_INTVAR, AST_AGENT,
   AST_CNCT, AST_CNCT_TCO_INTVAR, AST_CNCT_TCO_CONS, AST_CNCT_TCO,
   AST_RULE, AST_BODY, AST_IF, AST_THEN_ELSE,
 
@@ -67,7 +68,6 @@ void ast_puts(Ast *p);
 
 void Ast_undo_TCO_annotation(Ast *mainbody);
 void Ast_remove_tuple1_in_mainbody(Ast *mainbody);
-void Ast_undo_TCO_annotation(Ast *mainbody);
 int  Ast_make_annotation_TailCallOptimisation(Ast *mainbody);
 int  Ast_mainbody_has_agentID(Ast *mainbody, IDTYPE id);
 int  Ast_eqs_has_agentID(Ast *eqs, IDTYPE id);
@@ -84,4 +84,4 @@ bool Ast_is_expr(const Ast *ptr);
               ast_makeAST(AST_LIST, x2, ast_makeAST(AST_LIST, x3, NULL)))
 #define getFirst(p) getNth(p, 0)
 
-#endif
+#endif /* _AST_ */

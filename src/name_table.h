@@ -1,7 +1,7 @@
 #ifndef NAME_TABLE_H_
 #define NAME_TABLE_H_
 
-#include "mytype.h"
+#include "types.h"
 
 /**************************************
  NAME TABLE
