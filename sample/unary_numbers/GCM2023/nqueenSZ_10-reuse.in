@@ -49,7 +49,7 @@ member(r, m1, list1, m) >< [] =>
 
 member(r, m1, list1, m) >< n:ys  =>
 	  eq_result, m2, n2 << eq_stream(m,n),
-	  list1~(*R)(n2:cnt), 
+	  list1~(*R)(n2:cnt),
 	  (*L)member1(r, m1, cnt, m2, ys) ~ eq_result;
 
 
@@ -58,7 +58,7 @@ member1(r, m1, list1, m2, ys) >< True =>
 
 member1(r, m1, list1, m2, ys) >< False =>
 	   (*L)member(r, m1, list1, m2) ~ys;
-	   
+
 
 
 
@@ -66,18 +66,18 @@ member1(r, m1, list1, m2, ys) >< False =>
 // len_list (stream version)
 //   len, done << len_list(list)
 // ---------------------------------------
- 
+
 len_list(len, done) >< [] =>
         len~(*L)Z, done~(*R)[];
-len_list(len, done) >< x:xs => 
-        done~(*R)(x:cnt), 
+len_list(len, done) >< x:xs =>
+        done~(*R)(x:cnt),
         (*L)len_list_(len, cnt, S(Z))~xs;
 
 len_list_(len, done, ct) >< [] =>
         len~ct, done~(*R)[];
-len_list_(len, done, ct) >< x:xs => 
-        done~(*R)(x:cnt), 
-        (*L)len_list_(len, cnt, S(ct)) ~ xs; 
+len_list_(len, done, ct) >< x:xs =>
+        done~(*R)(x:cnt),
+        (*L)len_list_(len, cnt, S(ct)) ~ xs;
 
 
 // ---------------------------------------
@@ -92,7 +92,7 @@ len_(ret, n) >< x:xs => (*L)len_(ret, (*R)S(n))~xs, Eraser~x;
 
 // ---------------------------------------
 // append (list1++list2)
-//   ret << append(list2, list1) 
+//   ret << append(list2, list1)
 // ---------------------------------------
 append(r,a) >< [] => r~a;
 append(r,a) >< x:xs => r~(*R)(x:w), (*L)append(w,a)~xs;
@@ -100,17 +100,17 @@ append(r,a) >< x:xs => r~(*R)(x:w), (*L)append(w,a)~xs;
 
 
 
-/** 
+/**
  * threat (stream version)
  * check for (0,q) and (k, qpos[col=k]) where k=1...
  * http://www.nct9.ne.jp/m_hiroi/func/haskell06.html
-     0 1 2    --> 
+     0 1 2    -->
     +-------------
    1| . . . . . .
    2| . . . -3. .  5 - 3 = 2
    3| . . -2. . .  5 - 2 = 3
    4| . -1. . . .  5 - 1 = 4
-   5| Q . . . . .  Q position is 5  
+   5| Q . . . . .  Q position is 5
    6| . +1. . . .  5 + 1 = 6
    7| . . +2. . .  5 + 2 = 7
    8| . . . +3. .  5 + 2 = 8
@@ -145,14 +145,14 @@ threat(r, done, k, q) >< x:xs =>
 	  k1,k2 << Dup(k),
 	  eq_ret << eq(k1, diff_xq),
 	  (*L)threat1(r, done, k2, q2 , (*R)(x2:xs))~eq_ret;
-	  
+
 threat1(r, done, k, q, xxs) >< True =>
 	   r~(*R)True, done~xxs, (*L)Eraser~k, Eraser~q;
-	   
+
 threat1(r, done, k, q, xxs) >< False =>
 	   (*R)(x1:xs1) ~ xxs,
 	   done~x1:cnt, (*L)threat(r, cnt, S(k), q)~xs1;
-	   
+
 
 // fun queen1 b n 0 = []
 //   | queen1 b n m =
@@ -168,10 +168,10 @@ queen(ret, n) >< () =>
 
 queen_(r, b, n) >< Z =>
 	  r~(*L)[], (*R)Eraser~b, Eraser~n;
-	  
+
 queen_(r, b, n) >< S(m) =>
 	  mem_ret, done_m, done_b << member((*R)S(m), b),
-	  (*L)queen__chk_m_in_b(r, done_b, n, done_m)~mem_ret;	  
+	  (*L)queen__chk_m_in_b(r, done_b, n, done_m)~mem_ret;
 
 
 dec(r)><Z => r~(*R)Z;
@@ -183,7 +183,7 @@ queen__chk_m_in_b(r, b, n, m) >< True =>
 
 queen__chk_m_in_b(r, b, n, m) >< False =>
      m1,m2 << (*R)Dup(m),
-     th_ret, done_b << threat(S(Z), m1, b), 
+     th_ret, done_b << threat(S(Z), m1, b),
      (*L)queen__chk_threat(r, done_b, n, m2)~th_ret;
 
 
@@ -191,9 +191,9 @@ queen__chk_m_in_b(r, b, n, m) >< False =>
 queen__chk_threat(r, b, n, m) >< True =>
 	m_dec << (*R)dec(m),
         (*L)queen_(r, b, n)~m_dec;
-	
+
 queen__chk_threat(r, b, n, m) >< False =>
-        len_ret, done_b << (*R)len_list(b), 
+        len_ret, done_b << (*R)len_list(b),
 	n1,nn << Dup(n),
 	n_dec << dec(nn),
 	eq_ret << eq(len_ret, n_dec),
@@ -212,7 +212,7 @@ queen__chk_lastelem(r,b,n, m) >< False =>
         r << (*L)append(cnt2, cnt1),
 	n1, Dup(n2,n3) << Dup(n),
 	m1, mm << Dup(m),
-	m_dec << dec(mm),	
+	m_dec << dec(mm),
         queen_(cnt1, m1:b1, n1)~n2, queen_(cnt2, b2, n3)~m_dec;
 
 
@@ -223,3 +223,6 @@ queen__chk_lastelem(r,b,n, m) >< False =>
 n~S(S(S(S(S(S(S(S(S(S(Z)))))))))), // 10
 queen(ret,n)~(), len(count)~ret;
 prnat count;
+
+
+exit;

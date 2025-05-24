@@ -1,4 +1,9 @@
-//#define CAS_LOCK_USLEEP 4
+#ifndef INPLA_CAS_SPINLOCK_H
+#define INPLA_CAS_SPINLOCK_H
+
+#include <unistd.h>
+
+// #define CAS_LOCK_USLEEP 4
 #define CAS_LOCK_USLEEP 200
 
 
@@ -30,5 +35,7 @@ static inline void lock(volatile int *aexclusion) {
 
 
 static inline void unlock(volatile int *aexclusion) {
-  __sync_lock_release(aexclusion); 
+  __sync_lock_release(aexclusion);
 }
+
+#endif // INPLA_CAS_SPINLOCK_H

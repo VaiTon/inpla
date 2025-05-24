@@ -16,3 +16,4 @@ bubble(ret, int x) >< (int y):ys
 bsort(r)~[3,6,1,9,2];
 r;
 
+exit;

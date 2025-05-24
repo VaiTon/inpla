@@ -1,7 +1,7 @@
 // Tower of Hanoi Puzzle
 
 // Rules
-hanoi(return, source, target, aux) >< Z => 
+hanoi(return, source, target, aux) >< Z =>
           // Erase the source, target and aux
           source ~ (*L)Eraser,
           target ~ (*R)Eraser,
@@ -10,13 +10,13 @@ hanoi(return, source, target, aux) >< Z =>
           // result
           return~[];
 
-hanoi(return, source, target, aux) >< S(n) => 
+hanoi(return, source, target, aux) >< S(n) =>
           // Duplicate the source, target and aux
 	  source ~ Dup(src1, Dup(src2, src3)),
           target ~ Dup(tgt1, Dup(tgt2, tgt3)),
           aux ~ Dup(aux1, aux2),
 
-	  
+
           // recursive applications
 	  n ~ Dup(nn1, Dup(nn2, nn3)),
           (*L)hanoi(ret1, src1, aux1, tgt1)~nn1,
@@ -50,3 +50,5 @@ hanoi(result, A, C, B) ~
 
 len(r)~result;
 prnat r;
+
+exit;

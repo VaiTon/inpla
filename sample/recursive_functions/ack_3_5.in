@@ -1,11 +1,11 @@
 // Ackermann Function
 //
 // fun ack(0,n) = n+1
-//   | ack(m,0) = ack(m-1,1)        
+//   | ack(m,0) = ack(m-1,1)
 //   | ack(m,n) = ack(m-1,ack(m,n-1));
 
 // The following rule is wrong because there is no gurantee that
-// the 'cnt' is connected to an integer agent 
+// the 'cnt' is connected to an integer agent
 // when ack(r)~(m-1,cnt) is evaluated.
 //
 // ack(r) >< (int m, int n)
@@ -30,3 +30,4 @@ ackMain(ret)~(M,N);
 ret;
 free ret;
 
+exit;

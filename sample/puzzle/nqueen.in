@@ -4,7 +4,7 @@
 // https://www.istc.kobe-u.ac.jp/activity/mage/m27/27_Lisp.pdf
 
 
-/** 
+/**
  * member
  *   r, done << member(m, list)
  *   return
@@ -23,33 +23,33 @@ member(r, list, int x) >< (int y):ys
         list~y:cnt, member(r, cnt, x)~ys;
 
 
-/** 
+/**
  * len_list (stream version)
  *   len, done << len_list(list)
  *   return
  *     len: length of `list'
  *     done: the same to `list'
  */
- 
+
 len_list(len, done) >< [] =>
         len~0, done~[];
-len_list(len, done) >< x:xs => 
-        done~x:cnt, 
+len_list(len, done) >< x:xs =>
+        done~x:cnt,
         len_list_(len, cnt, 1)~xs;
 
 len_list_(len, done, int ct) >< [] =>
         len~ct, done~[];
-len_list_(len, done, int ct) >< x:xs => 
-        done~x:cnt, 
-        len_list_(len, cnt, ct+1) ~ xs; 
+len_list_(len, done, int ct) >< x:xs =>
+        done~x:cnt,
+        len_list_(len, cnt, ct+1) ~ xs;
 
-/** 
+/**
  * len (non-stream version)
  *   ret << len(list)
  *   return
  *     ret: length of `list'
  */
- 
+
 len(ret) >< [] =>
         ret~0;
 len(ret) >< x:xs =>
@@ -57,17 +57,17 @@ len(ret) >< x:xs =>
 
 
 
-/** 
+/**
  * threat (stream version)
  * check for (0,q) and (k, qpos[col=k]) where k=1...
  * http://www.nct9.ne.jp/m_hiroi/func/haskell06.html
-     0 1 2    --> 
+     0 1 2    -->
     +-------------
    1| . . . . . .
    2| . . . -3. .  5 - 3 = 2
    3| . . -2. . .  5 - 2 = 3
    4| . -1. . . .  5 - 1 = 4
-   5| Q . . . . .  Q position is 5  
+   5| Q . . . . .  Q position is 5
    6| . +1. . . .  5 + 1 = 6
    7| . . +2. . .  5 + 2 = 7
    8| . . . +3. .  5 + 2 = 8
@@ -105,26 +105,26 @@ queen_(r, b, int n) >< (int m)
 | m==0 =>
         r~[], Eraser~b
 | _ =>
-        mem_ret, done_b << member(m,b), 
+        mem_ret, done_b << member(m,b),
         queen__chk_m_in_b(r, done_b, n, m)~mem_ret;
 
 queen__chk_m_in_b(r, b, int n, int m) >< (int mem_ret)
 | mem_ret == 1 =>
         queen_(r, b, n)~(m-1)
 | _ =>
-        th_ret, done_b << threat(1, m, b), 
+        th_ret, done_b << threat(1, m, b),
 	queen__chk_threat(r, done_b, n, m)~th_ret;
 
 queen__chk_threat(r, b, int n, int m) >< (int threat_ret)
 | threat_ret == 1 =>
         queen_(r, b, n)~(m-1)
 | _ =>
-        len_ret, done_b << len_list(b), 
+        len_ret, done_b << len_list(b),
 	queen__chk_lastelem(r, done_b, n, m)~len_ret;
 
 queen__chk_lastelem(r, b, int n, int m) >< (int len_ret)
 | len_ret == n-1 =>
-        b1, b2 << Dup(b), 
+        b1, b2 << Dup(b),
         r~(m:b1):cnt, queen_(cnt, b2, n)~(m-1)
 | _ =>
         b1, b2 << Dup(b),
@@ -139,3 +139,5 @@ queen__chk_lastelem(r, b, int n, int m) >< (int len_ret)
 const N=8;
 queen(ret)~N, len(count)~ret;
 count;  // count ->92
+
+exit;

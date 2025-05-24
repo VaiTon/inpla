@@ -13,3 +13,5 @@ insert(ret, int x) >< (int y):ys
 // Nets
 isort(r)~[3,6,1,9,2];
 r;
+
+exit;

@@ -2,7 +2,7 @@
 
 // Rules
 hanoi(return, source, target, aux) >< (int n)
-| n==0 => 
+| n==0 =>
           // Erase the source, target and aux
           source ~ Eraser,
           target ~ Eraser,
@@ -11,7 +11,7 @@ hanoi(return, source, target, aux) >< (int n)
           // result
           return~[]
 
-| _    => 
+| _    =>
           // Duplicate the source, target and aux
 	  source ~ Dup(src1, Dup(src2, src3)),
           target ~ Dup(tgt1, Dup(tgt2, tgt3)),
@@ -28,3 +28,5 @@ hanoi(return, source, target, aux) >< (int n)
 // Net
 hanoi(result, A, C, B) ~ 3;
 result; // should be [(1,A,C),(2,A,B),(1,C,B),(3,A,C),(1,B,A),(2,B,C),(1,A,C)]
+
+exit;
