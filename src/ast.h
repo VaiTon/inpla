@@ -2,7 +2,7 @@
 
 #ifndef _AST_
 #define _AST_
-#include "mytype.h"
+#include "types.h"
 
 #include <stdbool.h>
 

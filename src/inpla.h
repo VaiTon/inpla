@@ -2,7 +2,7 @@
 #define _INPLA_
 
 #include "ast.h"
-#include "mytype.h"
+#include "types.h"
 #include "vm.h"
 
 void *exec_code(int mode, VirtualMachine *restrict vm, void *restrict *code);

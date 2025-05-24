@@ -1,16 +1,14 @@
-#ifndef _TYPE_
-#define _TYPE_
+#ifndef INPLA_TYPE_H
+#define INPLA_TYPE_H
 
 #include "config.h"
 
-typedef unsigned int IDTYPE;
+typedef unsigned int  IDTYPE;
 typedef unsigned long VALUE;
 
 typedef struct {
   IDTYPE id;
 } Basic;
-
-// #define MAX_PORT 5
 
 typedef struct {
   Basic basic;
@@ -38,7 +36,7 @@ typedef struct EQ_tag {
 } EQ;
 
 typedef struct EQList_tag {
-  EQ eq;
+  EQ                 eq;
   struct EQList_tag *next;
 } EQList;
 

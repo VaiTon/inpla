@@ -2,8 +2,8 @@
 #define INPLA_VM_H
 
 #include "heap.h"
-#include "mytype.h"
 #include "name_table.h"
+#include "types.h"
 
 #define VM_REG_SIZE 64
 

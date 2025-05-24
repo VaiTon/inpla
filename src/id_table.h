@@ -2,7 +2,7 @@
 #define _ID_TABLE_
 
 #include "ast.h"
-#include "mytype.h"
+#include "types.h"
 
 // When NUM_AGENT is 256:
 // 0 .. 255: AGENT

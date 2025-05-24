@@ -7,10 +7,10 @@
 #include "heap.h"
 #include "id_table.h"
 #include "imcode.h"
-#include "mytype.h"
 #include "name_table.h"
 #include "opt.h"
 #include "ruletable.h"
+#include "types.h"
 #include "vm.h"
 
 #include "config.h"
