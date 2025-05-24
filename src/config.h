@@ -19,27 +19,6 @@
 // #define COUNT_CNCT    // count of execution of JMP_CNCT
 // #define COUNT_MKAGENT // count of execution fo mkagent
 
-// ------------------------------------------------
-// Heaps
-// ------------------------------------------------
-// There are three methods for agents and names heaps:
-//   - Fixed-size ring buffers
-//       The size is specified by an execution option -c
-//
-//   - Expandable ring buffers
-//       Automatically new buffers are inserted when all are run up.
-//
-//   - Ring buffers whose Initial size and newly inserted size
-//     are flexibly changed. (DEFAULT)
-//       The initial size and the expansion magnification are
-//       specified by execution options -Xms, -Xmt, respectively.
-//
-// Choose one among the following three definitions with uncomment.
-
-// #define FIXED_HEAP
-// #define EXPANDABLE_HEAP
-#define FLEX_EXPANDABLE_HEAP
-
 //
 // For the expandable ring buffer, the unit size HOOP_SIZE can be changed.
 // We note that HOOP_SIZE must be two to power.

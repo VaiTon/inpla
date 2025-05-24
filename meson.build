@@ -16,6 +16,20 @@ c_args = [
     '--param', 'max-inline-insns-single=1200',
 ]
 
+heap_type = get_option('heap_type')
+if heap_type == 'expandable'
+    c_args += ['-DEXPANDABLE_HEAP']
+    message('Using expandable heap')
+elif heap_type == 'fixed'
+    c_args += ['-DFIXED_HEAP']
+    message('Using fixed heap')
+elif heap_type == 'flex_expandable'
+    c_args += ['-DFLEX_EXPANDABLE_HEAP']
+    message('Using flexible expandable heap')
+else
+    error('Invalid heap type: ' + heap_type)
+endif
+
 # Parser and lexer generation
 bison = find_program('bison', required : true)
 flex = find_program('flex', required : true)
@@ -101,8 +115,8 @@ test_cases = [
     'sample/lambda/245II_abbr.in',
     'sample/lambda/245II_new.in',
     'sample/lambda/linear-systemT.in',
-#    'sample/process_networks/processnet1.in',
-#    'sample/process_networks/processnet_fib.in',
+    #    'sample/process_networks/processnet1.in',
+    #    'sample/process_networks/processnet_fib.in',
     'sample/pseudo_higher_order/map.in',
     'sample/pseudo_higher_order/reduce.in',
     'sample/puzzle/hanoi.in',
