@@ -67,7 +67,12 @@ static int SleepingThreadsNum = 0;
 
 // ----------------------------------------------
 
-#include "parser.tab.c"
+#include "parser.tab.h"
+
+extern FILE *yyin;
+extern int   yylineno;
+extern void  pushFP(FILE *fp);
+extern int   popFP();
 
 // ----------------------------------------------
 
@@ -5680,8 +5685,9 @@ int Ast_make_annotation_TailCallOptimisation(Ast *mainbody) {
   // When there is an equation for TCO, its ID is changed from AST_CNCT into
   // AST_CNCT_TCO_INTVAR or AST_CNCT_TCO.
 
-  if (mainbody == NULL)
+  if (mainbody == NULL) {
     return 0;
+  }
 
   if (mainbody->id == AST_BODY) {
     Ast *body = mainbody;
@@ -5781,7 +5787,7 @@ int Ast_make_annotation_TailCallOptimisation(Ast *mainbody) {
 }
 
 // Operation on Ast ----------------------------------------------
-int Ast_has_the_ID(Ast *ptr, IDTYPE id) {
+bool Ast_has_the_ID(Ast *ptr, IDTYPE id) {
   if (ptr == NULL) {
     return 0;
   }
@@ -5818,7 +5824,7 @@ int Ast_has_the_ID(Ast *ptr, IDTYPE id) {
   }
 }
 
-int Ast_eqs_has_agentID(Ast *eqs, IDTYPE id) {
+bool Ast_eqs_has_agentID(Ast *eqs, IDTYPE id) {
   Ast *at = eqs;
 
   while (at != NULL) {
@@ -5834,7 +5840,7 @@ int Ast_eqs_has_agentID(Ast *eqs, IDTYPE id) {
   return 0;
 }
 
-int Ast_mainbody_has_agentID(Ast *mainbody, IDTYPE id) {
+bool Ast_mainbody_has_agentID(Ast *mainbody, IDTYPE id) {
 
   if (mainbody == NULL)
     return 0;
