@@ -1,9 +1,11 @@
 %{
 
+#include "ast.h"
+#include "name_table.h"
 
-// ---------------------------------------------------------------
-// For parsing
-// ---------------------------------------------------------------
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 int make_rule(Ast *ast);
 
@@ -582,7 +584,3 @@ int destroy() {
 int yywrap() {
   return 1;
 }
-
-
-
-#include "lex.yy.c"

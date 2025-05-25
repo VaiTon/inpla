@@ -38,8 +38,12 @@ int set_metaL(Ast *ast);
 
 void set_annotation_LR(int left, int right);
 
-
+void puts_term(VALUE ptr);
 
 void free_Names_ast(Ast *ast);
 void free_Agent2(VALUE ptr1, VALUE ptr2);
+void free_Agent(VALUE ptr);
+void free_Names_ast(Ast *ast);
+void free_Name(VALUE ptr);
+void free_Agent_recursively(VALUE ptr);
 #endif
