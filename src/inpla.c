@@ -549,8 +549,7 @@ void       puts_term(VALUE ptr) {
 
 // void puts_Name_port0_nat(VALUE a1) {
 void puts_Name_port0_nat(char *sym) {
-  int result = 0;
-  int idS, idZ;
+  int    result = 0;
 
   int sym_id = NameTable_get_id(sym);
   if (!IS_GNAMEID(sym_id)) {
@@ -561,8 +560,8 @@ void puts_Name_port0_nat(char *sym) {
 
   VALUE a1 = IdTable_get_heap(sym_id);
 
-  idS = NameTable_get_set_id_with_IdTable_forAgent("S");
-  idZ = NameTable_get_set_id_with_IdTable_forAgent("Z");
+  const IDTYPE idS = NameTable_get_set_id_with_IdTable_forAgent("S");
+  const IDTYPE idZ = NameTable_get_set_id_with_IdTable_forAgent("Z");
 
   if (a1 == (VALUE)NULL) {
     printf("<NUll>");
