@@ -30,10 +30,13 @@ char *recordSymbol(SymbolTable *table, char *name) {
   for (int i = 0; i < table->nth; i++) {
     if (strcmp(table->sym[i], name) == 0) {
 
-      // The `name' has existed already,
-      // and table->sym[i] is used instead of that,
-      // so starduped memory for the `name' should be freed here.
-      // free(name);
+      // If the `name` already exists in the table,
+      // we use it instead of the new `name`.
+      //
+      // The old name, that was strdup-ed in the lexer
+      // should be freed.
+
+      free(name);
 
       return table->sym[i];
     }
