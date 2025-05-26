@@ -5,6 +5,7 @@ project(
     'c_std=gnu99',
     'warning_level=2',
     'optimization=3',
+    'b_lto=true',
   ],
 )
 
