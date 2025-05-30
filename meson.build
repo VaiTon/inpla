@@ -95,26 +95,28 @@ sources = files(
   parser_c,
 ]
 
-deps = src_dir / 'config.h'
+deps = []
+
+thread_feature = get_option('threads')
+
+# Threaded version
+thread_dep = dependency('threads', required: thread_feature)
+if thread_feature.enabled()
+  c_args += ['-DTHREAD']
+  message('Building inpla with threading support')
+  deps += thread_dep
+endif
+
 
 inpla = executable(
   'inpla',
   sources,
   include_directories: inc_dir,
   c_args: c_args,
+  dependencies: deps,
   install: true,
 )
 
-# Threaded version
-thread_dep = dependency('threads', required: false)
-executable(
-  'inpla_thread',
-  sources,
-  include_directories: inc_dir,
-  c_args: c_args + ['-DTHREAD'],
-  dependencies: thread_dep.found() ? [thread_dep] : [],
-  install: false,
-)
 
 test_cases = [
   'sample/lambda/245II.in',

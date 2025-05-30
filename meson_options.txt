@@ -1,3 +1,9 @@
+option('threads',
+    type : 'feature',
+    value : 'enabled',
+    description : 'Enable threading support in the inpla executable.',
+)
+
 # ------------------------------------------------
 # Heaps
 # ------------------------------------------------
